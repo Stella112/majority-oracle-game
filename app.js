@@ -1,3 +1,12 @@
+// ===== GENLAYER CONNECTION =====
+const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
+
+const provider = new genlayer.Provider({
+  network: "testnet"
+});
+
+const contract = provider.getContract(CONTRACT_ADDRESS);
+// ===============================
 function joinRoom() {
   const roomCode = document.getElementById("roomCode").value.trim();
   const playerId = document.getElementById("playerId").value.trim();
