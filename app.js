@@ -10,7 +10,7 @@ function joinRoom() {
     return;
   }
 
-  alert("Join Room works");
+  await contract.join(roomCode, playerId, playerName);
 }
 
 function submitAnswer() {
@@ -22,10 +22,10 @@ function submitAnswer() {
     return;
   }
 
-  alert("Submit Answer works");
+  await contract.submitAnswer(roomCode, playerId, answer);
 }
 
 function finalizeGame() {
   console.log("Finalize clicked");
-  alert("Finalize works");
+  await contract.finalize(roomCode);
 }
