@@ -1,9 +1,16 @@
-// ===== GENLAYER CONNECTION =====
-const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
+// 1️⃣ Check GenLayer loaded
+if (!window.genlayer) {
+  alert("GenLayer SDK not loaded");
+  throw new Error("GenLayer SDK missing");
+}
 
+// 2️⃣ Setup provider
 const provider = new genlayer.Provider({
-  network: "testnet"
+  network: "testnet",
 });
+
+// 3️⃣ Your deployed contract address
+const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
 
 const contract = provider.getContract(CONTRACT_ADDRESS);
 // ===============================
