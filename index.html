@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Majority Oracle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Majority Oracle</h1>
+
+<div id="room">
+  <input id="roomCode" placeholder="Room Code">
+  <input id="playerId" placeholder="Player ID">
+  <input id="playerName" placeholder="Player Name">
+  <button onclick="join()">Join Room</button>
+</div>
+
+<div id="game">
+  <p id="prompt"></p>
+  <input id="answer" placeholder="Your answer">
+  <button onclick="submitAnswer()">Submit Answer</button>
+</div>
+
+<div id="admin">
+  <button onclick="finalize()">Finalize (Host)</button>
+</div>
+
+<h3>Leaderboard</h3>
+<pre id="leaderboard"></pre>
+
+<script src="app.js"></script>
+</body>
+</html>
