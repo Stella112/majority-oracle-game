@@ -7,20 +7,25 @@ const provider = new genlayer.Provider({
 
 const contract = provider.getContract(CONTRACT_ADDRESS);
 // ===============================
-function joinRoom() {
+async function joinRoom() {
   const roomCode = document.getElementById("roomCode").value.trim();
   const playerId = document.getElementById("playerId").value.trim();
   const playerName = document.getElementById("playerName").value.trim();
-
-  console.log("Join Room clicked:", roomCode, playerId, playerName);
-
-  if (!roomCode || !playerId || !playerName) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  await contract.join(roomCode, playerId, playerName);
+  
+if (!roomCode || !playerId || !playerName) {
+  alert("Please fill all fields");
+  return;
 }
+
+  try {
+    await contract.joinRoom(roomCode, playerId, playerName);
+    alert("Successfully joined room!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to join room");
+  }
+}
+
 
 function submitAnswer() {
   const answer = document.getElementById("answer").value.trim();
