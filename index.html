@@ -5,43 +5,40 @@
   <title>Majority Oracle</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <h1>Majority Oracle</h1>
 
-<h1>Majority Oracle</h1>
+  <div id="room">
+    <h3>Create / Join Room</h3>
 
-<div class="card">
-  <h3>Create / Join Room</h3>
+    <input id="roomCode" placeholder="Room Code" />
+    <input id="playerName" placeholder="Your Name" />
+    <input id="promptInput" placeholder="Prompt (host only)" />
 
-  <input id="roomCode" placeholder="Room Code" />
-  <input id="playerName" placeholder="Your Name" />
-  <input id="promptInput" placeholder="Prompt (host only)" />
+    <button id="createBtn" onclick="createRoom()" disabled>Create Room</button>
+    <button id="joinBtn" onclick="joinRoom()" disabled>Join Room</button>
+  </div>
 
-  <button onclick="createRoom()">Create Room</button>
-  <button onclick="joinRoom()">Join Room</button>
-</div>
+  <div id="game">
+    <h3>Submit Answer</h3>
+    <input id="answer" placeholder="Your answer" />
+    <button onclick="submitAnswer()">Submit Answer</button>
+  </div>
 
-<div class="card">
-  <h3>Submit Answer</h3>
-  <input id="answer" placeholder="Your answer" />
-  <button onclick="submitAnswer()">Submit Answer</button>
-</div>
+  <div id="admin">
+    <h3>Host</h3>
+    <button onclick="runConsensus()">Run Consensus</button>
+    <button onclick="finalize()">Finalize Game</button>
+  </div>
 
-<div class="card">
-  <h3>Host</h3>
-  <button onclick="runConsensus()">Run Consensus</button>
-  <button onclick="finalize()">Finalize Game</button>
-</div>
-
-<div class="card">
   <h3>Results</h3>
-  <pre id="output"></pre>
-</div>
+  <pre id="leaderboard"></pre>
 
-<!-- ✅ GENLAYER SDK (LOWERCASE global: genlayer) -->
-<script src="https://cdn.jsdelivr.net/npm/genlayer-sdk/dist/genlayer.umd.js"></script>
+  <!-- ✅ GENLAYER SDK (EVM) -->
+  <script src="https://cdn.jsdelivr.net/npm/genlayer-sdk/dist/genlayer.umd.js"></script>
 
-<!-- ✅ APP -->
-<script src="app.js"></script>
-
+  <!-- ✅ APP LOGIC -->
+  <script src="app.js"></script>
 </body>
 </html>
