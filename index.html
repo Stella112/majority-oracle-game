@@ -3,45 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Majority Oracle - GenLayer</title>
+    <title>Majority Oracle - MetaMask</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <h1>Majority Oracle</h1>
-    <p id="status" style="color: orange;">Checking for GenLayer SDK...</p>
-
-    <hr>
+    <div id="status-bar" style="padding: 10px; background: #eee; border-radius: 5px; margin-bottom: 20px;">
+        Status: <span id="status-text" style="color: orange; font-weight: bold;">Loading SDK...</span>
+    </div>
 
     <section id="room">
-        <h3>1. Create or Join a Room</h3>
-        <input id="roomCode" placeholder="Room Code (e.g. BTC_PRICE)">
-        <input id="playerName" placeholder="Your Nickname">
-        <input id="promptInput" placeholder="Question/Prompt (Host Only)">
-        <br><br>
+        <h3>Create / Join Room</h3>
+        <input id="roomCode" placeholder="Room Code">
+        <input id="playerName" placeholder="Your Name">
+        <input id="promptInput" placeholder="Prompt (Host only)">
         <button onclick="createRoom()">Create Room</button>
         <button onclick="joinRoom()">Join Room</button>
     </section>
 
-    <section id="game">
-        <h3>2. Submit Your Answer</h3>
-        <input id="answer" placeholder="Your Answer">
+    <section id="game" style="margin-top: 20px;">
+        <h3>Submit Answer</h3>
+        <input id="answer" placeholder="Your answer">
         <button onclick="submitAnswer()">Submit Answer</button>
     </section>
 
-    <section id="admin">
-        <h3>3. Host Controls (Consensus)</h3>
+    <section id="admin" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
+        <h3>Host Actions</h3>
         <button onclick="runConsensus()">Run AI Consensus</button>
-        <button onclick="finalize()">Get Final Results</button>
+        <button onclick="finalize()">Finalize & Show Results</button>
     </section>
 
-    <hr>
-    <h3>Leaderboard / Logs</h3>
-    <pre id="leaderboard">Connect your wallet to start.</pre>
+    <h3>Logs / Scores</h3>
+    <pre id="leaderboard" style="background: #222; color: #0f0; padding: 10px;">Waiting for connection...</pre>
 
     <script src="https://cdn.jsdelivr.net/npm/genlayer-js@0.2.12/dist/index.global.js"></script>
-    
     <script src="./app.js"></script>
-
 </body>
 </html>
