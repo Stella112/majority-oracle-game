@@ -1,36 +1,75 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Majority Oracle</title>
+  <meta charset="UTF-8" />
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>Majority Oracle</h1>
 
+<!-- ===============================
+     ROOM SETUP
+================================ -->
 <div id="room">
+  <h3>Create / Join Room</h3>
+
   <input id="roomCode" placeholder="Room Code">
+  <input id="promptInput" placeholder="Prompt (host only)">
   <input id="playerId" placeholder="Player ID">
   <input id="playerName" placeholder="Player Name">
-  <button onclick="joinRoom()">Join Room</button>
+
+  <br><br>
+
+  <button id="createBtn" onclick="createRoom()" disabled>
+    Create Room (Host)
+  </button>
+
+  <button id="joinBtn" onclick="joinRoom()" disabled>
+    Join Room
+  </button>
 </div>
 
+<hr>
+
+<!-- ===============================
+     GAME PLAY
+================================ -->
 <div id="game">
+  <h3>Submit Answer</h3>
+
   <input id="answer" placeholder="Your answer">
   <button onclick="submitAnswer()">Submit Answer</button>
 </div>
 
+<hr>
+
+<!-- ===============================
+     ADMIN
+================================ -->
 <div id="admin">
-  <button onclick="finalize()">Finalize (Host)</button>
+  <h3>Admin</h3>
+  <button onclick="finalize()">Finalize (Majority Vote)</button>
 </div>
 
-<h3>Leaderboard</h3>
-<pre id="leaderboard"></pre>
+<hr>
 
-<!-- ✅ GenLayer SDK (EVM-compatible) -->
+<!-- ===============================
+     RESULTS
+================================ -->
+<h3>Results</h3>
+<pre id="leaderboard">No results yet</pre>
+
+<!-- ===============================
+     SCRIPTS
+================================ -->
+<!-- GenLayer SDK (EVM compatible) -->
 <script src="https://cdn.jsdelivr.net/npm/@genlayer/sdk/dist/genlayer.umd.js"></script>
 
-<!-- App logic -->
+<!-- App Logic -->
 <script src="app.js"></script>
+
 </body>
 </html>
