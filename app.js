@@ -1,18 +1,28 @@
-// 1️⃣ Check GenLayer loaded
-if (!window.GenLayer) {
-  alert("GenLayer SDK not loaded");
-  throw new Error("GenLayer SDK missing");
+let contract = null;
+
+async function initGenLayer() {
+  let tries = 0;
+
+  while (!window.tronWeb && tries < 20) {
+    await new Promise(r => setTimeout(r, 300));
+    tries++;
+  }
+
+  if (!window.tronWeb || !window.tronWeb.ready) {
+    alert("Please install and unlock TronLink");
+    return;
+  }
+
+  contract = await window.tronWeb.contract().at(
+    "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D"
+  );
+window.contract = contract;
+  console.log("Contract loaded", contract);
 }
 
-// 2️⃣ Setup provider
-const provider = new GenLayer.Provider({
-  network: "testnet",
-});
+window.addEventListener("load", initGenLayer);
 
-// 3️⃣ Your deployed contract address
-const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
 
-const contract = provider.getContract(CONTRACT_ADDRESS);
 // ===============================
 window.joinRoom = async function () {
   const roomCode = document.getElementById("roomCode").value.trim();
