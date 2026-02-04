@@ -1,7 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Majority Oracle</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -26,18 +28,16 @@
 </section>
 
 <section id="admin">
-  <h3>Host</h3>
+  <h3>Host Controls</h3>
   <button onclick="runConsensus()">Run Consensus</button>
   <button onclick="finalize()">Finalize Game</button>
 </section>
 
 <h3>Results</h3>
-<pre id="leaderboard"></pre>
+<pre id="leaderboard">Waiting for game to finish...</pre>
 
-<!-- ✅ CORRECT GENLAYER EVM SDK -->
-<script src="https://unpkg.com/@genlayer/sdk/dist/genlayer.umd.js"></script>
+<script src="https://unpkg.com/@genlayer/sdk@0.1.8/dist/genlayer.umd.js"></script>
 
-<!-- APP -->
-<script src="app.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
