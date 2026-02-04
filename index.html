@@ -12,11 +12,10 @@
   <input id="roomCode" placeholder="Room Code">
   <input id="playerId" placeholder="Player ID">
   <input id="playerName" placeholder="Player Name">
- <button onclick="joinRoom()">Join Room</button>
+  <button onclick="joinRoom()">Join Room</button>
 </div>
 
 <div id="game">
-  <p id="prompt"></p>
   <input id="answer" placeholder="Your answer">
   <button onclick="submitAnswer()">Submit Answer</button>
 </div>
@@ -26,13 +25,12 @@
 </div>
 
 <h3>Leaderboard</h3>
-
 <pre id="leaderboard"></pre>
-  
- <!-- GenLayer SDK (must load first) -->
-<script src="https://cdn.jsdelivr.net/npm/genlayer-sdk/dist/genlayer.umd.js"></script>
 
-<!-- App logic (must load after SDK) -->
+<!-- ✅ GenLayer SDK (EVM-compatible) -->
+<script src="https://cdn.jsdelivr.net/npm/@genlayer/sdk/dist/genlayer.umd.js"></script>
+
+<!-- App logic -->
 <script src="app.js"></script>
 </body>
 </html>
