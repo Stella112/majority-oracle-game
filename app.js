@@ -1,11 +1,11 @@
 // 1️⃣ Check GenLayer loaded
-if (!window.genlayer) {
+if (!window.GenLayer) {
   alert("GenLayer SDK not loaded");
   throw new Error("GenLayer SDK missing");
 }
 
 // 2️⃣ Setup provider
-const provider = new genlayer.Provider({
+const provider = new GenLayer.Provider({
   network: "testnet",
 });
 
