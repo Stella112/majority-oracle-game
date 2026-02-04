@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>Majority Oracle</title>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,10 +11,10 @@
 <h1>Majority Oracle</h1>
 
 <!-- ===============================
-     ROOM SETUP
+     CREATE / JOIN ROOM
 ================================ -->
 <div id="room">
-  <h3>Create / Join Room</h3>
+  <h3>Create or Join Room</h3>
 
   <input id="roomCode" placeholder="Room Code">
   <input id="promptInput" placeholder="Prompt (host only)">
@@ -24,7 +24,7 @@
   <br><br>
 
   <button id="createBtn" onclick="createRoom()" disabled>
-    Create Room (Host)
+    Create Room
   </button>
 
   <button id="joinBtn" onclick="joinRoom()" disabled>
@@ -47,10 +47,10 @@
 <hr>
 
 <!-- ===============================
-     ADMIN
+     FINALIZE
 ================================ -->
 <div id="admin">
-  <h3>Admin</h3>
+  <h3>Finalize</h3>
   <button onclick="finalize()">Finalize (Majority Vote)</button>
 </div>
 
@@ -63,12 +63,9 @@
 <pre id="leaderboard">No results yet</pre>
 
 <!-- ===============================
-     SCRIPTS
+     SCRIPTS (ORDER MATTERS)
 ================================ -->
-<!-- GenLayer SDK (EVM compatible) -->
 <script src="https://cdn.jsdelivr.net/npm/@genlayer/sdk/dist/genlayer.umd.js"></script>
-
-<!-- App Logic -->
 <script src="app.js"></script>
 
 </body>
