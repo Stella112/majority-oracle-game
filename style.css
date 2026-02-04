@@ -1,17 +1,105 @@
+/* ===============================
+   GLOBAL
+================================ */
 body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 600px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;              /* white */
+  color: #1f2937;
+  margin: 0;
+  padding: 30px;
 }
 
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #f472b6;                   /* pink */
+}
+
+h3 {
+  margin-top: 0;
+  color: #0f766e;                   /* sea green */
+}
+
+/* ===============================
+   SECTIONS
+================================ */
+#room,
+#game,
+#admin {
+  background: #ffffff;              /* white */
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 2px solid #fbcfe8;         /* light pink border */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ===============================
+   INPUTS
+================================ */
 input {
   display: block;
-  margin: 8px 0;
-  padding: 8px;
   width: 100%;
+  max-width: 420px;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 2px solid #fbcfe8;         /* light pink */
+  outline: none;
 }
 
+input:focus {
+  border-color: #f472b6;             /* pink focus */
+}
+
+/* ===============================
+   BUTTONS
+================================ */
 button {
-  margin-top: 10px;
-  padding: 8px 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  background: #2dd4bf;               /* sea green */
+  color: #ffffff;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #14b8a6;               /* darker sea green */
+}
+
+button:disabled {
+  background: #fbcfe8;               /* soft pink */
+  color: #9d174d;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   RESULTS
+================================ */
+pre {
+  background: #fdf2f8;               /* very light pink */
+  color: #831843;                    /* dark pink text */
+  padding: 15px;
+  border-radius: 6px;
+  border: 2px dashed #f472b6;         /* pink */
+  overflow-x: auto;
+}
+
+/* ===============================
+   DIVIDERS
+================================ */
+hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    #f472b6,                         /* pink */
+    #2dd4bf                          /* sea green */
+  );
+  margin: 30px 0;
 }
