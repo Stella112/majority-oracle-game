@@ -1,3 +1,4 @@
+
 // ===============================
 // GLOBAL STATE
 // ===============================
@@ -54,7 +55,7 @@ window.createRoom = async function () {
   }
 
   try {
-    await contract.create_room(roomCode, prompt);
+    await contract.create_room(roomCode, prompt).send();
     window.roomCode = roomCode;
     alert("Room created");
   } catch (e) {
@@ -82,7 +83,7 @@ window.joinRoom = async function () {
   }
 
   try {
-    await contract.join(roomCode, playerId, playerName);
+    await contract.join(roomCode, playerId, playerName).send();
     window.roomCode = roomCode;
     window.playerId = playerId;
     window.playerName = playerName;
@@ -109,7 +110,7 @@ window.submitAnswer = async function () {
   }
 
   try {
-    await contract.submit(window.roomCode, window.playerId, answer);
+    await contract.submit(window.roomCode, window.playerId, answer).send();
     alert("Answer submitted");
   } catch (e) {
     console.error(e);
@@ -118,7 +119,7 @@ window.submitAnswer = async function () {
 };
 
 // ===============================
-// FINALIZE (MAJORITY VOTE)
+// FINALIZE
 // ===============================
 window.finalize = async function () {
   if (!contractReady || !window.roomCode) {
@@ -127,7 +128,7 @@ window.finalize = async function () {
   }
 
   try {
-    await contract.finalize(window.roomCode);
+    await contract.finalize(window.roomCode).send();
     alert("Game finalized");
   } catch (e) {
     console.error(e);
