@@ -1,33 +1,33 @@
 // ===============================
-// GLOBAL STATE
+// STATE
 // ===============================
-let provider = null;
-let contract = null;
+let provider;
+let contract;
 let contractReady = false;
 
-let roomCode = null;
-let playerId = null;
-let playerName = null;
+let roomCode = "";
+let playerName = "";
+let playerId = "";
 
 const CONTRACT_ADDRESS = "0xabdC1A9eeBCD2D0C70b7c6a6a9655a715c6eb52a";
 
 // ===============================
-// INIT (MetaMask + GenLayer)
+// INIT
 // ===============================
 async function init() {
   if (!window.ethereum) {
-    alert("MetaMask not detected");
+    alert("MetaMask not installed");
     return;
   }
 
   // 🔑 FORCE METAMASK POPUP
   const accounts = await window.ethereum.request({
-    method: "eth_requestAccounts"
+    method: "eth_requestAccounts",
   });
 
   playerId = accounts[0];
 
-  // ⚠️ MUST be lowercase genlayer
+  // ✅ CORRECT SDK USAGE (LOWERCASE genlayer)
   provider = new genlayer.EvmProvider(window.ethereum);
   contract = provider.getContract(CONTRACT_ADDRESS);
 
@@ -36,34 +36,28 @@ async function init() {
     return;
   }
 
-  window.contract = contract;
   contractReady = true;
 
-  // ✅ ENABLE BUTTONS ONLY NOW
   document.getElementById("createBtn").disabled = false;
   document.getElementById("joinBtn").disabled = false;
 
-  console.log("✅ Contract READY");
+  console.log("✅ Contract ready");
 }
 
 window.addEventListener("load", init);
 
 // ===============================
-// CREATE ROOM (HOST)
+// CREATE ROOM
 // ===============================
-window.createRoom = async function () {
-  if (!contractReady) {
-    alert("Contract still loading, wait 1 second");
-    return;
-  }
+async function createRoom() {
+  if (!contractReady) return alert("Contract loading");
 
   roomCode = document.getElementById("roomCode").value.trim();
-  const prompt = document.getElementById("promptInput").value.trim();
   playerName = document.getElementById("playerName").value.trim();
+  const prompt = document.getElementById("promptInput").value.trim();
 
-  if (!roomCode || !prompt || !playerName) {
-    alert("Fill all fields");
-    return;
+  if (!roomCode || !playerName || !prompt) {
+    return alert("Fill all fields");
   }
 
   try {
@@ -73,23 +67,19 @@ window.createRoom = async function () {
     console.error(e);
     alert("Create room failed");
   }
-};
+}
 
 // ===============================
 // JOIN ROOM
 // ===============================
-window.joinRoom = async function () {
-  if (!contractReady) {
-    alert("Contract still loading, wait 1 second");
-    return;
-  }
+async function joinRoom() {
+  if (!contractReady) return alert("Contract loading");
 
   roomCode = document.getElementById("roomCode").value.trim();
   playerName = document.getElementById("playerName").value.trim();
 
   if (!roomCode || !playerName) {
-    alert("Fill all fields");
-    return;
+    return alert("Fill all fields");
   }
 
   try {
@@ -99,22 +89,16 @@ window.joinRoom = async function () {
     console.error(e);
     alert("Join failed");
   }
-};
+}
 
 // ===============================
 // SUBMIT ANSWER
 // ===============================
-window.submitAnswer = async function () {
-  if (!contractReady || !roomCode) {
-    alert("Join room first");
-    return;
-  }
+async function submitAnswer() {
+  if (!roomCode) return alert("Join a room first");
 
   const answer = document.getElementById("answer").value.trim();
-  if (!answer) {
-    alert("Enter an answer");
-    return;
-  }
+  if (!answer) return alert("Enter an answer");
 
   try {
     await contract.submit(roomCode, playerId, answer);
@@ -123,25 +107,25 @@ window.submitAnswer = async function () {
     console.error(e);
     alert("Submit failed");
   }
-};
+}
 
 // ===============================
 // CONSENSUS
 // ===============================
-window.runConsensus = async function () {
+async function runConsensus() {
   try {
     await contract.run_consensus(roomCode);
-    alert("Consensus calculated");
+    alert("Consensus run");
   } catch (e) {
     console.error(e);
     alert("Consensus failed");
   }
-};
+}
 
 // ===============================
 // FINALIZE
 // ===============================
-window.finalize = async function () {
+async function finalize() {
   try {
     await contract.finalize(roomCode);
     alert("Game finalized");
@@ -149,4 +133,4 @@ window.finalize = async function () {
     console.error(e);
     alert("Finalize failed");
   }
-};
+}
