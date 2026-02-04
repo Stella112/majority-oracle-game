@@ -14,15 +14,15 @@ const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
 
 const contract = provider.getContract(CONTRACT_ADDRESS);
 // ===============================
-async function joinRoom() {
+window.joinRoom = async function () {
   const roomCode = document.getElementById("roomCode").value.trim();
   const playerId = document.getElementById("playerId").value.trim();
   const playerName = document.getElementById("playerName").value.trim();
-  
-if (!roomCode || !playerId || !playerName) {
-  alert("Please fill all fields");
-  return;
-}
+
+  if (!roomCode || !playerId || !playerName) {
+    alert("Please fill all fields");
+    return;
+  }
 
   try {
     await contract.joinRoom(roomCode, playerId, playerName);
@@ -31,22 +31,31 @@ if (!roomCode || !playerId || !playerName) {
     console.error(err);
     alert("Failed to join room");
   }
-}
+};
 
-
-function submitAnswer() {
+window.submitAnswer = async function () {
   const answer = document.getElementById("answer").value.trim();
-  console.log("Answer:", answer);
 
   if (!answer) {
     alert("Enter an answer");
     return;
   }
 
-  await contract.submitAnswer(roomCode, playerId, answer);
-}
+  try {
+    await contract.submitAnswer(roomCode, playerId, answer);
+    alert("Answer submitted!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to submit answer");
+  }
+};
 
-function finalizeGame() {
-  console.log("Finalize clicked");
-  await contract.finalize(roomCode);
-}
+window.finalize = async function () {
+  try {
+    await contract.finalize(roomCode);
+    alert("Game finalized!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to finalize game");
+  }
+};
