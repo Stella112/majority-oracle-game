@@ -1,99 +1,103 @@
-let contract = null;
-window.roomCode = null;
-window.playerId = null;
+let provider;
+let signer;
+let contract;
 
-async function initGenLayer() {
-  console.log("initGenLayer running");
+const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
 
-  let tries = 0;
-  while (!window.tronWeb && tries < 20) {
-    await new Promise(r => setTimeout(r, 300));
-    tries++;
-  }
+// 🔹 MINIMAL ABI (only methods you use)
+const ABI = [
+  "function joinRoom(string roomCode, string playerId, string playerName)",
+  "function submitAnswer(string roomCode, string playerId, string answer)",
+  "function finalize(string roomCode)"
+];
 
-  if (!window.tronWeb) {
-    alert("Please install and unlock TronLink");
+async function initEVM() {
+  if (!window.ethereum) {
+    alert("MetaMask not detected");
     return;
   }
 
-  contract = await window.tronWeb.contract().at(
-    "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D"
-  );
+  // Request wallet connection
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  signer = provider.getSigner();
+  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
   window.contract = contract;
-  console.log("Contract loaded", contract);
+
+  console.log("EVM contract loaded");
 }
 
-window.addEventListener("load", initGenLayer);
+window.addEventListener("load", initEVM);
 
 // ===============================
 // JOIN ROOM
 window.joinRoom = async function () {
-  if (!window.contract) {
-    alert("Contract not ready yet. Wait 2 seconds.");
-    return;
-  }
-
   const roomCode = document.getElementById("roomCode").value.trim();
   const playerId = document.getElementById("playerId").value.trim();
   const playerName = document.getElementById("playerName").value.trim();
 
   if (!roomCode || !playerId || !playerName) {
-    alert("Please fill all fields");
+    alert("Fill all fields");
     return;
   }
 
   try {
-    await contract.joinRoom(roomCode, playerId, playerName);
+    const tx = await contract.joinRoom(roomCode, playerId, playerName);
+    await tx.wait();
 
-    // ✅ SAVE FOR LATER
     window.roomCode = roomCode;
     window.playerId = playerId;
 
-    alert("Successfully joined room!");
+    alert("Joined room");
   } catch (err) {
     console.error(err);
-    alert("Failed to join room");
+    alert("Join failed");
   }
 };
 
 // ===============================
 // SUBMIT ANSWER
 window.submitAnswer = async function () {
-  if (!window.contract || !window.roomCode || !window.playerId) {
+  if (!window.roomCode || !window.playerId) {
     alert("Join a room first");
     return;
   }
 
   const answer = document.getElementById("answer").value.trim();
-
-  if (!answer) {
-    alert("Enter an answer");
-    return;
-  }
+  if (!answer) return alert("Enter an answer");
 
   try {
-    await contract.submitAnswer(window.roomCode, window.playerId, answer);
-    alert("Answer submitted!");
+    const tx = await contract.submitAnswer(
+      window.roomCode,
+      window.playerId,
+      answer
+    );
+    await tx.wait();
+
+    alert("Answer submitted");
   } catch (err) {
     console.error(err);
-    alert("Failed to submit answer");
+    alert("Submit failed");
   }
 };
 
 // ===============================
-// FINALIZE GAME (HOST)
+// FINALIZE (HOST)
 window.finalize = async function () {
-  if (!window.contract || !window.roomCode) {
+  if (!window.roomCode) {
     alert("Join a room first");
     return;
   }
 
   try {
-    await contract.finalize(window.roomCode);
-    alert("Game finalized!");
+    const tx = await contract.finalize(window.roomCode);
+    await tx.wait();
+
+    alert("Game finalized");
   } catch (err) {
     console.error(err);
-    alert("Failed to finalize game");
+    alert("Finalize failed");
   }
 };
