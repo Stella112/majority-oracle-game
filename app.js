@@ -2,136 +2,112 @@
 // ===============================
 // GLOBAL STATE
 // ===============================
-let provider = null;
-let contract = null;
-let contractReady = false;
-
-window.roomCode = null;
-window.playerId = null;
-window.playerName = null;
+let provider;
+let contract;
+let roomCode = null;
+let playerId = null;
 
 const CONTRACT_ADDRESS = "0xabdC1A9eeBCD2D0C70b7c6a6a9655a715c6eb52a";
 
 // ===============================
-// INIT GENLAYER + METAMASK
+// INIT (MetaMask + GenLayer)
 // ===============================
-async function initGenLayer() {
+async function init() {
   if (!window.ethereum) {
-    alert("MetaMask not detected");
+    alert("MetaMask not found");
     return;
   }
 
-  await window.ethereum.request({ method: "eth_requestAccounts" });
+  // Force MetaMask popup ON LOAD
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts"
+  });
+
+  playerId = accounts[0];
 
   provider = new GenLayer.EvmProvider(window.ethereum);
   contract = provider.getContract(CONTRACT_ADDRESS);
 
   window.contract = contract;
-  contractReady = true;
 
-  document.getElementById("createBtn").disabled = false;
-  document.getElementById("joinBtn").disabled = false;
-
-  console.log("Contract ready:", CONTRACT_ADDRESS);
+  console.log("✅ Contract ready");
 }
 
-window.addEventListener("load", initGenLayer);
+window.addEventListener("load", init);
 
 // ===============================
 // CREATE ROOM
 // ===============================
-window.createRoom = async function () {
-  if (!contractReady) {
-    alert("Contract loading, wait a second");
-    return;
-  }
-
-  const roomCode = document.getElementById("roomCode").value.trim();
+async function createRoom() {
+  const code = document.getElementById("roomCode").value.trim();
   const prompt = document.getElementById("promptInput").value.trim();
 
-  if (!roomCode || !prompt) {
-    alert("Enter room code and prompt");
+  if (!code || !prompt) {
+    alert("Room code & prompt required");
     return;
   }
 
-  try {
-    await contract.create_room(roomCode, prompt).send();
-    window.roomCode = roomCode;
-    alert("Room created");
-  } catch (e) {
-    console.error(e);
-    alert("Create room failed");
-  }
-};
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  await contract.create_room(code, prompt);
+  roomCode = code;
+
+  alert("Room created");
+}
 
 // ===============================
 // JOIN ROOM
 // ===============================
-window.joinRoom = async function () {
-  if (!contractReady) {
-    alert("Contract loading, wait a second");
+async function joinRoom() {
+  const code = document.getElementById("roomCode").value.trim();
+  const name = document.getElementById("playerName").value.trim();
+
+  if (!code || !name) {
+    alert("Room code & name required");
     return;
   }
 
-  const roomCode = document.getElementById("roomCode").value.trim();
-  const playerId = document.getElementById("playerId").value.trim();
-  const playerName = document.getElementById("playerName").value.trim();
+  await window.ethereum.request({ method: "eth_requestAccounts" });
 
-  if (!roomCode || !playerId || !playerName) {
-    alert("Fill all fields");
-    return;
-  }
+  await contract.join(code, playerId, name);
+  roomCode = code;
 
-  try {
-    await contract.join(roomCode, playerId, playerName).send();
-    window.roomCode = roomCode;
-    window.playerId = playerId;
-    window.playerName = playerName;
-    alert("Joined room");
-  } catch (e) {
-    console.error(e);
-    alert("Join failed");
-  }
-};
+  alert("Joined room");
+}
 
 // ===============================
 // SUBMIT ANSWER
 // ===============================
-window.submitAnswer = async function () {
-  if (!contractReady || !window.roomCode || !window.playerId) {
-    alert("Join room first");
-    return;
-  }
-
+async function submitAnswer() {
   const answer = document.getElementById("answer").value.trim();
-  if (!answer) {
-    alert("Enter an answer");
-    return;
-  }
+  if (!answer || !roomCode) return alert("Missing info");
 
-  try {
-    await contract.submit(window.roomCode, window.playerId, answer).send();
-    alert("Answer submitted");
-  } catch (e) {
-    console.error(e);
-    alert("Submit failed");
-  }
-};
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  await contract.submit(roomCode, playerId, answer);
+  alert("Answer submitted");
+}
+
+// ===============================
+// RUN CONSENSUS (AI)
+// ===============================
+async function runConsensus() {
+  if (!roomCode) return alert("No room");
+
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  await contract.run_consensus(roomCode);
+  alert("Consensus executed");
+}
 
 // ===============================
 // FINALIZE
 // ===============================
-window.finalize = async function () {
-  if (!contractReady || !window.roomCode) {
-    alert("Create or join a room first");
-    return;
-  }
+async function finalize() {
+  if (!roomCode) return alert("No room");
 
-  try {
-    await contract.finalize(window.roomCode).send();
-    alert("Game finalized");
-  } catch (e) {
-    console.error(e);
-    alert("Finalize failed");
-  }
-};
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  await contract.finalize(roomCode);
+  alert("Game finalized");
+}
