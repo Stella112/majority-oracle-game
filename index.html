@@ -5,40 +5,39 @@
   <title>Majority Oracle</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <h1>Majority Oracle</h1>
 
-  <div class="box">
-    <h3>Create / Join Room</h3>
+<h1>Majority Oracle</h1>
 
-    <input id="roomCode" placeholder="Room Code" />
-    <input id="playerName" placeholder="Your Name" />
-    <input id="promptInput" placeholder="Prompt (host only)" />
+<section id="room">
+  <h3>Create / Join Room</h3>
+  <input id="roomCode" placeholder="Room Code" />
+  <input id="playerName" placeholder="Your Name" />
+  <input id="promptInput" placeholder="Prompt (host only)" />
 
-    <button id="createBtn" disabled onclick="createRoom()">Create Room</button>
-    <button id="joinBtn" disabled onclick="joinRoom()">Join Room</button>
-  </div>
+  <button id="createBtn" onclick="createRoom()">Create Room</button>
+  <button id="joinBtn" onclick="joinRoom()">Join Room</button>
+</section>
 
-  <div class="box">
-    <h3>Submit Answer</h3>
-    <input id="answer" placeholder="Your answer" />
-    <button onclick="submitAnswer()">Submit Answer</button>
-  </div>
+<section id="game">
+  <h3>Submit Answer</h3>
+  <input id="answer" placeholder="Your answer" />
+  <button onclick="submitAnswer()">Submit Answer</button>
+</section>
 
-  <div class="box">
-    <h3>Host</h3>
-    <button onclick="runConsensus()">Run Consensus</button>
-    <button onclick="finalize()">Finalize Game</button>
-  </div>
+<section id="admin">
+  <h3>Host</h3>
+  <button onclick="runConsensus()">Run Consensus</button>
+  <button onclick="finalize()">Finalize Game</button>
+</section>
 
-  <h3>Results</h3>
-  <pre id="leaderboard"></pre>
+<h3>Results</h3>
+<pre id="leaderboard"></pre>
 
-  <!-- ✅ GENLAYER SDK (EVM) -->
-  <script src="https://cdn.jsdelivr.net/npm/genlayer-sdk/dist/genlayer.umd.js"></script>
+<!-- ✅ CORRECT GENLAYER EVM SDK -->
+<script src="https://unpkg.com/@genlayer/sdk/dist/genlayer.umd.js"></script>
 
-  <!-- ✅ APP -->
-  <script src="app.js"></script>
+<!-- APP -->
+<script src="app.js"></script>
 </body>
 </html>
