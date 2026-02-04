@@ -1,71 +1,45 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Majority Oracle</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <h1>Majority Oracle</h1>
 
-<!-- ===============================
-     CREATE / JOIN ROOM
-================================ -->
-<div id="room">
-  <h3>Create or Join Room</h3>
+<div class="card">
+  <h3>Create / Join Room</h3>
+  <input id="roomCode" placeholder="Room Code" />
+  <input id="playerName" placeholder="Your Name" />
+  <input id="promptInput" placeholder="Prompt (host only)" />
 
-  <input id="roomCode" placeholder="Room Code">
-  <input id="promptInput" placeholder="Prompt (host only)">
-  <input id="playerId" placeholder="Player ID">
-  <input id="playerName" placeholder="Player Name">
-
-  <br><br>
-
-  <button id="createBtn" onclick="createRoom()" disabled>
-    Create Room
-  </button>
-
-  <button id="joinBtn" onclick="joinRoom()" disabled>
-    Join Room
-  </button>
+  <button onclick="createRoom()">Create Room</button>
+  <button onclick="joinRoom()">Join Room</button>
 </div>
 
-<hr>
-
-<!-- ===============================
-     GAME PLAY
-================================ -->
-<div id="game">
+<div class="card">
   <h3>Submit Answer</h3>
-
-  <input id="answer" placeholder="Your answer">
+  <input id="answer" placeholder="Your answer" />
   <button onclick="submitAnswer()">Submit Answer</button>
 </div>
 
-<hr>
-
-<!-- ===============================
-     FINALIZE
-================================ -->
-<div id="admin">
-  <h3>Finalize</h3>
-  <button onclick="finalize()">Finalize (Majority Vote)</button>
+<div class="card">
+  <h3>Host</h3>
+  <button onclick="runConsensus()">Run Consensus</button>
+  <button onclick="finalize()">Finalize Game</button>
 </div>
 
-<hr>
+<div class="card">
+  <h3>Results</h3>
+  <pre id="output"></pre>
+</div>
 
-<!-- ===============================
-     RESULTS
-================================ -->
-<h3>Results</h3>
-<pre id="leaderboard">No results yet</pre>
+<!-- ✅ GENLAYER SDK (MUST BE FIRST) -->
+<script src="https://cdn.jsdelivr.net/npm/genlayer-sdk/dist/genlayer.umd.js"></script>
 
-<!-- ===============================
-     SCRIPTS (ORDER MATTERS)
-================================ -->
-<script src="https://cdn.jsdelivr.net/npm/@genlayer/sdk/dist/genlayer.umd.js"></script>
+<!-- ✅ APP LOGIC -->
 <script src="app.js"></script>
 
 </body>
