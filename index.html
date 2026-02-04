@@ -9,24 +9,24 @@
 <body>
   <h1>Majority Oracle</h1>
 
-  <div id="room">
+  <div class="box">
     <h3>Create / Join Room</h3>
 
     <input id="roomCode" placeholder="Room Code" />
     <input id="playerName" placeholder="Your Name" />
     <input id="promptInput" placeholder="Prompt (host only)" />
 
-    <button id="createBtn" onclick="createRoom()" disabled>Create Room</button>
-    <button id="joinBtn" onclick="joinRoom()" disabled>Join Room</button>
+    <button id="createBtn" disabled onclick="createRoom()">Create Room</button>
+    <button id="joinBtn" disabled onclick="joinRoom()">Join Room</button>
   </div>
 
-  <div id="game">
+  <div class="box">
     <h3>Submit Answer</h3>
     <input id="answer" placeholder="Your answer" />
     <button onclick="submitAnswer()">Submit Answer</button>
   </div>
 
-  <div id="admin">
+  <div class="box">
     <h3>Host</h3>
     <button onclick="runConsensus()">Run Consensus</button>
     <button onclick="finalize()">Finalize Game</button>
@@ -38,7 +38,7 @@
   <!-- ✅ GENLAYER SDK (EVM) -->
   <script src="https://cdn.jsdelivr.net/npm/genlayer-sdk/dist/genlayer.umd.js"></script>
 
-  <!-- ✅ APP LOGIC -->
+  <!-- ✅ APP -->
   <script src="app.js"></script>
 </body>
 </html>
