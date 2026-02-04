@@ -1,111 +1,126 @@
+// Replace with your BRADBURY deployed address
 const CONTRACT_ADDRESS = "0xabdC1A9eeBCD2D0C70b7c6a6a9655a715c6eb52a";
+
 let client;
 let userAddress;
 
 async function init() {
     const statusText = document.getElementById("status-text");
-    const logBox = document.getElementById("leaderboard");
+    const logEl = document.getElementById("leaderboard");
 
-    // 1. Check if the SDK is loaded in the browser
-    const sdk = window.GenLayerJS; 
+    // 1. Hunt for the SDK variable (It can be named differently depending on the version)
+    const sdk = window.genlayer || window.GenLayerJS || window.GenLayer;
+
     if (!sdk) {
-        statusText.innerText = "❌ SDK Not Found. Retrying...";
-        setTimeout(init, 2000); // Try again in 2 seconds
+        statusText.innerText = "⏳ SDK NOT DETECTED - RETRYING...";
+        setTimeout(init, 1000); 
         return;
     }
 
-    // 2. Check for MetaMask
+    // 2. MetaMask Check
     if (!window.ethereum) {
-        statusText.innerText = "❌ MetaMask Missing";
-        alert("Please install MetaMask!");
+        statusText.innerText = "❌ METAMASK NOT FOUND";
+        logEl.innerText = "Please install MetaMask or Zerion extension.";
         return;
     }
 
     try {
-        // 3. Connect Wallet
+        statusText.innerText = "⏳ CONNECTING WALLET...";
+        
+        // 3. Request Accounts
         const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
         userAddress = accounts[0];
 
-        // 4. Initialize GenLayer Client
-        // We use 'testnetAsimov' for the public testnet
+        // 4. Create Client for BRADBURY
         client = sdk.createClient({
-            chain: sdk.testnetAsimov,
+            chain: sdk.bradbury, // Updated for Bradbury testnet
             transport: sdk.custom(window.ethereum)
         });
 
-        statusText.innerText = "✅ Connected to " + userAddress.substring(0, 8) + "...";
-        statusText.style.color = "green";
-        logBox.innerText = "Wallet linked. Ready to play!";
-
-    } catch (err) {
-        statusText.innerText = "❌ Connection Failed";
-        logBox.innerText = "Error: " + err.message;
+        statusText.innerText = "✅ BRADBURY CONNECTED: " + userAddress.substring(0, 8);
+        logEl.innerText = "System online. Join a room to begin.";
+        
+    } catch (error) {
+        console.error(error);
+        statusText.innerText = "❌ CONNECTION FAILED";
+        logEl.innerText = "Error: " + error.message;
     }
 }
 
-// Start when page loads
+// Kick off the init on load
 window.addEventListener("load", init);
 
-// --- Game Functions ---
+// ==========================================
+// 🕹️ GAME ACTIONS
+// ==========================================
 
-window.createRoom = async () => {
-    const code = document.getElementById("roomCode").value;
-    const prompt = document.getElementById("promptInput").value;
+async function createRoom() {
     try {
+        const rc = document.getElementById("roomCode").value;
+        const prompt = document.getElementById("promptInput").value;
         const hash = await client.writeContract({
             address: CONTRACT_ADDRESS,
             functionName: "create_room",
-            args: [code, prompt],
+            args: [rc, prompt],
             account: userAddress
         });
-        alert("Tx Sent! Hash: " + hash);
+        alert("Success! Tx Hash: " + hash);
     } catch (e) { alert("Error: " + e.message); }
-};
+}
 
-window.joinRoom = async () => {
-    const code = document.getElementById("roomCode").value;
-    const name = document.getElementById("playerName").value;
+async function joinRoom() {
     try {
+        const rc = document.getElementById("roomCode").value;
+        const name = document.getElementById("playerName").value;
         await client.writeContract({
             address: CONTRACT_ADDRESS,
             functionName: "join",
-            args: [code, name, name],
+            args: [rc, name, name],
             account: userAddress
         });
-        alert("Joined!");
+        alert("Room Joined!");
     } catch (e) { alert("Error: " + e.message); }
-};
+}
 
-window.submitAnswer = async () => {
-    const code = document.getElementById("roomCode").value;
-    const name = document.getElementById("playerName").value;
-    const ans = document.getElementById("answer").value;
+async function submitAnswer() {
     try {
+        const rc = document.getElementById("roomCode").value;
+        const name = document.getElementById("playerName").value;
+        const ans = document.getElementById("answer").value;
         await client.writeContract({
             address: CONTRACT_ADDRESS,
             functionName: "submit",
-            args: [code, name, ans],
+            args: [rc, name, ans],
             account: userAddress
         });
-        alert("Submitted!");
+        alert("Answer Submitted!");
     } catch (e) { alert("Error: " + e.message); }
-};
+}
 
-window.runConsensus = async () => {
-    const code = document.getElementById("roomCode").value;
+async function runConsensus() {
     try {
+        const rc = document.getElementById("roomCode").value;
         await client.writeContract({
             address: CONTRACT_ADDRESS,
             functionName: "run_consensus",
-            args: [code],
+            args: [rc],
             account: userAddress
         });
-        alert("AI Consensus started. Check back in 30 seconds!");
+        alert("AI Consensus Triggered! Validators are now judging.");
     } catch (e) { alert("Error: " + e.message); }
-};
+}
 
-window.finalize = async () => {
+async function finalize() {
     try {
+        const rc = document.getElementById("roomCode").value;
+        await client.writeContract({
+            address: CONTRACT_ADDRESS,
+            functionName: "finalize",
+            args: [rc],
+            account: userAddress
+        });
+        
+        // Read the final scores
         const scores = await client.readContract({
             address: CONTRACT_ADDRESS,
             functionName: "get_scores",
@@ -113,4 +128,5 @@ window.finalize = async () => {
         });
         document.getElementById("leaderboard").innerText = JSON.stringify(scores, null, 2);
     } catch (e) { alert("Error: " + e.message); }
-};
+}
+
