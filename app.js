@@ -1,39 +1,40 @@
 let provider;
-let signer;
 let contract;
+
+// persist across actions
+window.roomCode = null;
+window.playerId = null;
 
 const CONTRACT_ADDRESS = "0x991B6E5CB3AB9B7000fDa5aA8A143A0DE6CDE00D";
 
-// 🔹 MINIMAL ABI (only methods you use)
-const ABI = [
-  "function joinRoom(string roomCode, string playerId, string playerName)",
-  "function submitAnswer(string roomCode, string playerId, string answer)",
-  "function finalize(string roomCode)"
-];
-
-async function initEVM() {
+async function initGenLayer() {
   if (!window.ethereum) {
     alert("MetaMask not detected");
     return;
   }
 
-  // Request wallet connection
+  // request wallet connection
   await window.ethereum.request({ method: "eth_requestAccounts" });
 
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  signer = provider.getSigner();
-  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+  // ✅ GenLayer EVM provider (uses MetaMask)
+  provider = new GenLayer.EvmProvider(window.ethereum);
 
+  contract = provider.getContract(CONTRACT_ADDRESS);
   window.contract = contract;
 
-  console.log("EVM contract loaded");
+  console.log("GenLayer EVM contract loaded", contract);
 }
 
-window.addEventListener("load", initEVM);
+window.addEventListener("load", initGenLayer);
 
 // ===============================
 // JOIN ROOM
 window.joinRoom = async function () {
+  if (!window.contract) {
+    alert("Contract not ready yet");
+    return;
+  }
+
   const roomCode = document.getElementById("roomCode").value.trim();
   const playerId = document.getElementById("playerId").value.trim();
   const playerName = document.getElementById("playerName").value.trim();
@@ -44,8 +45,7 @@ window.joinRoom = async function () {
   }
 
   try {
-    const tx = await contract.joinRoom(roomCode, playerId, playerName);
-    await tx.wait();
+    await contract.joinRoom(roomCode, playerId, playerName);
 
     window.roomCode = roomCode;
     window.playerId = playerId;
@@ -60,22 +60,19 @@ window.joinRoom = async function () {
 // ===============================
 // SUBMIT ANSWER
 window.submitAnswer = async function () {
-  if (!window.roomCode || !window.playerId) {
+  if (!window.contract || !window.roomCode || !window.playerId) {
     alert("Join a room first");
     return;
   }
 
   const answer = document.getElementById("answer").value.trim();
-  if (!answer) return alert("Enter an answer");
+  if (!answer) {
+    alert("Enter an answer");
+    return;
+  }
 
   try {
-    const tx = await contract.submitAnswer(
-      window.roomCode,
-      window.playerId,
-      answer
-    );
-    await tx.wait();
-
+    await contract.submitAnswer(window.roomCode, window.playerId, answer);
     alert("Answer submitted");
   } catch (err) {
     console.error(err);
@@ -86,15 +83,13 @@ window.submitAnswer = async function () {
 // ===============================
 // FINALIZE (HOST)
 window.finalize = async function () {
-  if (!window.roomCode) {
+  if (!window.contract || !window.roomCode) {
     alert("Join a room first");
     return;
   }
 
   try {
-    const tx = await contract.finalize(window.roomCode);
-    await tx.wait();
-
+    await contract.finalize(window.roomCode);
     alert("Game finalized");
   } catch (err) {
     console.error(err);
